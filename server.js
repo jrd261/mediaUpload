@@ -52,6 +52,12 @@ var Todo = mongoose.model('Todo', {
     title: String
 });
 
+var system_params = mongoose.model('system_params',
+    new Schema({ html: String }),
+    'system_params');
+
+// var system_params = mongoose.model('system_params');
+
 // var app = express();
 var options = {
     key: fs.readFileSync('./security/server.key'),
@@ -73,7 +79,7 @@ app.post('/api/imageUpload', function (req, res) {
     prepareData.title = req.body.title;
     prepareData.save(function (err, a) {
         if (err) throw err;
-        console.error('Image &video saved to mongo');
+        console.error('Image & video saved to mongo');
         Todo.findById(prepareData, function (err, doc) {
             if (err) return next(err);
             res.send({ "title": "data saved successfully" });
@@ -113,6 +119,30 @@ app.get('/api/getTitle', function (req, res) {
 //     });
 
 // });
+app.get("/api/getHtml", function (req, res) {
+
+    var data = {
+        obj : ""
+    }
+
+    Todo.find({ '_id': req.query.id }, function (err, todos) {
+        if (err)
+            res.send(err);
+
+        var currentAdObj = JSON.parse(JSON.stringify(todos[0]));
+        data.obj = currentAdObj;
+        // console.log(todos[0]);
+        system_params.find(function (err, resp) {
+            var htmlStr = JSON.parse(JSON.stringify(resp[0]));
+
+            data.html = htmlStr.html
+            // data.rendered = htmlStr.html.replace(/\$title/g,currentAdObj.title);      
+            res.json(data);
+        });
+        
+    });
+
+});
 
 // get the gridfs instance
 var gridfs = app.get('gridfs');
@@ -132,6 +162,10 @@ var gridfs = app.get('gridfs');
 //             res.json(200, file);
 //         });
 //     });
+// });
+
+// conn.system_params.find(function(err, res){
+//     console.log(res);
 // });
 
 // delete a todo
@@ -161,5 +195,4 @@ var server = https.createServer(options, app).listen(3000, function () {
 });
 
     // listen (start app with node server.js) ======================================
-    // app.listen(3000);
-    // console.log("App listening on port 3000");
+    // app.listen(3000);    // console.log("App listening on port 3000");
