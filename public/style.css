@@ -1,0 +1,9 @@
+.header_container{
+    height: 100px;border: 1px solid;background: #aec2d6;padding: 20px
+}
+.header_container div {
+    display: inline-block;
+}
+.header_container h1{
+    color: #fff;
+}

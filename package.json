@@ -1,0 +1,15 @@
+{
+  "name": "media-upload",
+  "version": "0.0.0",
+  "description": "media upload",
+  "main": "server.js",
+  "author": "sukhesh",
+  "dependencies": {
+    "body-parser": "^1.5.2",
+    "express": "~4.7.2",
+    "file-system": "2.2.2",
+    "mongoose": "~3.6.2",
+    "gridfs-stream":"1.1.1"
+    
+  }
+}
